@@ -11,7 +11,7 @@ Estudo elaborado para a utilização do `Entity Framework 6` com EDMX usando o `
 
 ## Pré-requisitos
 
-- [x] Visual Studio 2012
+- [x] Visual Studio 2022
 
 ## Pre-instalação
 
