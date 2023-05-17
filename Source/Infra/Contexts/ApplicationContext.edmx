@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ApplicationContext.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="HierarquiasOrganizacionais">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Geolocalizacao" Type="geography" />
+          <Property Name="HierarquiaId" Type="hierarchyid" />
+        </EntityType>
+        <EntityType Name="Unidades">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="HierarquiaId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Unidades_Hierarquias">
+          <End Role="HierarquiasOrganizacionais" Type="Self.HierarquiasOrganizacionais" Multiplicity="1" />
+          <End Role="Unidades" Type="Self.Unidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HierarquiasOrganizacionais">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Unidades">
+              <PropertyRef Name="HierarquiaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ApplicationContextStoreContainer">
+          <EntitySet Name="HierarquiasOrganizacionais" EntityType="Self.HierarquiasOrganizacionais" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Unidades" EntityType="Self.Unidades" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Unidades_Hierarquias" Association="Self.FK_Unidades_Hierarquias">
+            <End Role="HierarquiasOrganizacionais" EntitySet="HierarquiasOrganizacionais" />
+            <End Role="Unidades" EntitySet="Unidades" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Context" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ApplicationContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="HierarquiasOrganizacionais" EntityType="Context.HierarquiaOrganizacional" />
+          <EntitySet Name="Unidades" EntityType="Context.Unidade" />
+          <AssociationSet Name="FK_Unidades_Hierarquias" Association="Context.FK_Unidades_Hierarquias">
+            <End Role="HierarquiasOrganizacionais" EntitySet="HierarquiasOrganizacionais" />
+            <End Role="Unidades" EntitySet="Unidades" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="HierarquiaOrganizacional">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Geolocalizacao" Type="Geography" />
+          <Property Name="HierarquiaId" Type="HierarchyId" />
+          <NavigationProperty Name="Unidades" Relationship="Context.FK_Unidades_Hierarquias" FromRole="HierarquiasOrganizacionais" ToRole="Unidades" />
+        </EntityType>
+        <EntityType Name="Unidade">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HierarquiaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="HierarquiaOrganizacional" Relationship="Context.FK_Unidades_Hierarquias" FromRole="Unidades" ToRole="HierarquiasOrganizacionais" />
+        </EntityType>
+        <Association Name="FK_Unidades_Hierarquias">
+          <End Type="Context.HierarquiaOrganizacional" Role="HierarquiasOrganizacionais" Multiplicity="1" />
+          <End Type="Context.Unidade" Role="Unidades" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HierarquiasOrganizacionais">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Unidades">
+              <PropertyRef Name="HierarquiaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ApplicationContextStoreContainer" CdmEntityContainer="ApplicationContext">
+          <EntitySetMapping Name="HierarquiasOrganizacionais">
+            <EntityTypeMapping TypeName="Context.HierarquiaOrganizacional">
+              <MappingFragment StoreEntitySet="HierarquiasOrganizacionais">
+                <ScalarProperty Name="HierarquiaId" ColumnName="HierarquiaId" />
+                <ScalarProperty Name="Geolocalizacao" ColumnName="Geolocalizacao" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Unidades">
+            <EntityTypeMapping TypeName="Context.Unidade">
+              <MappingFragment StoreEntitySet="Unidades">
+                <ScalarProperty Name="HierarquiaId" ColumnName="HierarquiaId" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
